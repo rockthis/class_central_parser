@@ -11,73 +11,68 @@ from lxml import etree
 from selenium import webdriver
 from time import sleep
 
-driver = webdriver.Chrome('/Users/kostyafrolov/Downloads/chromedriver')
+# driver = webdriver.Chrome('/Users/kostyafrolov/Downloads/chromedriver')   mac
 
+driver = webdriver.Chrome('C:\\Users\\Admin\\Downloads\\chromedriver')    #windows
 
 driver.get('https://www.class-central.com/subject/nutrition-and-wellness')
 
 sleep(5)
 
-
-
-#       !!!     round-add-btn round-add-btn--plus
-# ua = UserAgent()
-# header = {'user-agent': ua.chrome}
-# page = requests.get('https://www.class-central.com/subject/nutrition-and-wellness', headers = header)
-soup = BeautifulSoup(driver.page_source, 'lxml')
-# # print(soup.prettify())
-# # print(soup.find_all('tr', ))
+course_rate = []
 course_name = []
-for ana in soup.find_all('span', {'class' : 'course-name-text'}) :
-    course_name.append(ana.text)
+course_provider = []
+
+course_rates = driver.find_elements_by_xpath('//*[@itemtype="http://schema.org/Event"]/td[4]')
+
+# print(search_bar.get_attribute('data-timestamp')[0:3])
+
+course_names = driver.find_elements_by_xpath('//*[@itemtype="http://schema.org/Event"]/td[2]/a/span')
+
+course_providers = driver.find_elements_by_xpath('//*[@itemtype="http://schema.org/Event"]')
+
+print(len(course_providers))
+# /td[2]/ul/li/a
+
+provider1 = []
+provider2 = []
+
+for el in course_providers:
+     len = el.find_elements_by_xpath('td[2]/ul/li[1]/a')    #!!!!!!! len нужно заменить
+     if len:
+        for temp in len:
+            print(temp.text)
+            provider1.append(temp.text)
+     else:
+        provider1.append('No provider')
+     scndprovider = el.find_elements_by_xpath('td[2]/ul/li[2]/a')
+     if scndprovider:
+         for temp in scndprovider:
+             print('2ndprovider', temp.text)
+             provider2.append(temp.text)
+             print(provider2.__len__())
+     else:
+         print('ss')
 
 
-quantify = soup.find_all('tr' , {'itemtype' : 'http://schema.org/Event' })
 
-# itemtype="http://schema.org/Event
 
-# print('quantify of companies:', quantify)
 
-# for el in quantify:
-#     path1 = el.findAll('a' , { 'class' :  'course-name ad-name'})
+    # course_provider.append(el.text)
 
-# print(course_name[-1])
-#
-# # for temp in soup.find_all('span'):
-# #   if temp.parent.name == 'a':
-# #     print (temp.txt)
-#
-for el in soup.findAll('a' , { 'class' :  'course-name ad-name'}):
-    print(el.findChildren('span')[0].text)
-    course_name.append(el.findChildren('span')[0].text)
-print('with ads:' , len(course_name))
-for el in course_name:
-    print(el)
+for el in course_rates:
+    course_rate.append(el.get_attribute('data-timestamp')[0:3])
 
-search_bar = driver.find_element_by_xpath('//*[@id="course-listing-tbody"]/tr[2]/td[4]')
-print(search_bar.get_attribute('data-timestamp')[0:3])
+for el in course_names:
+    course_name.append(el.text)
 
-print(driver.find_element_by_xpath('//*[@itemtype="http://schema.org/Event"]').get_attribute('itemtype'), '!!!!')
+# print(len(course_name),len(course_provider),len(course_rate))
 
-company_names = []
+# for i in range(len(course_rate)):
+#     print(course_name[i], '=' ,course_provider[i] , '=', course_rate[i])
 
-company_names = driver.find_elements_by_xpath('//*[@itemtype="http://schema.org/Event"]/td[2]/a/span')
 
-print(len(company_names))
 
-print(company_names[0].text)
-
-# company_names = []
-#
-# for el in temp:
-#     company_names.append(el.text)
-#
-# print(len(company_names))
-# //*[@id="course-listing-tbody"]/tr[2]/td[2]/a/span
-# print(soup.find_all('a' , { 'class' :  'course-name ad-name'})[0].findChildren('span')[0].text)
-# print(type(soup.findAll('a' , { 'class' :  'course-name ad-name'})))
-#
-# print(soup.findn)
 
 driver.quit()
 
