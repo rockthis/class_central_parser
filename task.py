@@ -14,8 +14,12 @@ while True:                                                             # get al
     if driver.find_element_by_xpath('//*[@id="show-more-courses"]').is_displayed():
         driver.find_element_by_xpath('//*[@id="show-more-courses"]').click()
         sleep(6)
+        if driver.find_element_by_xpath('//*[@id="signupModal-ask_for_signup"]/div/div/a').is_displayed():
+            driver.find_element_by_xpath('//*[@id="signupModal-ask_for_signup"]/div/div/a').click()
+            sleep(3)
     else:
         break
+
 
 course_rate = []
 course_name = []
